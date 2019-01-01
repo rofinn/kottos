@@ -18,7 +18,7 @@ setup(
         'pyserial',
         'uModbus'
     ],
-    test_requires=[
+    tests_require=[
         'pytest'
     ],
 )

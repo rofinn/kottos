@@ -1,5 +1,5 @@
-
 import logging
+import struct
 import threading
 
 from umodbus import conf
@@ -16,7 +16,7 @@ log_to_stream(level=logging.DEBUG)
 addresses = [r[0] for r in CC_REGISTER_TABLE.values()]
 
 # A very simple data store which maps addresses against their values.
-data_store = dict(zip(addresses, addresses))
+data_store = dict(zip(addresses, range(0, len(addresses))))
 
 # Enable values to be signed (default is False).
 conf.SIGNED_VALUES = True
@@ -39,13 +39,17 @@ def modbus_server():
 
 
 def test_read():
+    for k, v in data_store.items():
+        print('{}: {}'.format(k, v))
+
     t = threading.Thread(target=modbus_server, daemon=True)
     t.start()
     c = Client('localhost', 54321, CC_REGISTER_TABLE)
     states = c.read(0)
 
-    for k in CC_REGISTER_TABLE.keys():
-        assert CC_REGISTER_TABLE[k][0] == states[k]
+    for k, v in CC_REGISTER_TABLE.items():
+        print('{}: {}'.format(k, v))
+        assert v[1](data_store[v[0]]) == states[k]
 
 
 if __name__ == '__main__':
