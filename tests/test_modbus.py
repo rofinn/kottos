@@ -13,8 +13,12 @@ def test_read():
     for k, v in data_store.items():
         print('{}: {}'.format(k, v))
 
-    t = threading.Thread(target=serve, daemon=True)
+    # Create our server thread
+    t = threading.Thread(target=serve)
+    # Daemon threads automatically get cleaned up
+    t.setDaemon(True)
     t.start()
+
     c = Client('localhost', 54321, MNS_REGISTER_TABLE)
     states = c.read(0)
 
