@@ -7,6 +7,7 @@ class Client:
     readable interface for reading state from a server based on the
     specified register table.
     """
+
     def __init__(self, host, port, table):
         self._host = host
         self._port = port
@@ -26,7 +27,8 @@ class Client:
 
     def scan(self, slave_id=0):
         """
-        Reads raw values from the modbus server and converts the values to an appropriate format.
+        Reads raw values from the modbus server and converts the
+        values to an appropriate format.
         """
         vals = self.read(slave_id)
         return self.convert(vals)

@@ -2,8 +2,6 @@ import logging
 
 from six.moves.socketserver import TCPServer
 
-import kottos.modbus
-from kottos.modbus.client import Client
 from kottos.modbus.registers import MNS_REGISTER_TABLE
 from umodbus import conf
 from umodbus.server.tcp import RequestHandler, get_server
@@ -22,7 +20,8 @@ data_store = dict(zip(addresses, range(0, len(addresses))))
 conf.SIGNED_VALUES = True
 
 TCPServer.allow_reuse_address = True
-app = get_server(TCPServer, ('localhost', 54321), RequestHandler)
+app = get_server(TCPServer, ("localhost", 54321), RequestHandler)
+
 
 @app.route(slave_ids=[0], function_codes=[3], addresses=addresses)
 def read_data_store(slave_id, function_code, address):
@@ -38,5 +37,5 @@ def serve():
         app.server_close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     serve()
