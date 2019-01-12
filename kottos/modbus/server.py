@@ -1,13 +1,13 @@
 import logging
 
 from six.moves.socketserver import TCPServer
+
+import kottos.modbus
+from kottos.modbus.client import Client
+from kottos.modbus.registers import MNS_REGISTER_TABLE
 from umodbus import conf
 from umodbus.server.tcp import RequestHandler, get_server
 from umodbus.utils import log_to_stream
-
-import kottos.modbus
-from kottos.modbus.registers import MNS_REGISTER_TABLE
-from kottos.modbus.client import Client
 
 # Add stream handler to logger 'uModbus'.
 log_to_stream(level=logging.DEBUG)

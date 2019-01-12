@@ -20,40 +20,40 @@ class Register:
         self._reg = reg
         self._func = func
         self._units = units
-    
+
     @property
     def name(self):
         return self._name
-    
+
     @property
     def register(self):
         return self._reg
-    
+
     @property
     def units(self):
         return self._units
-    
+
     @property
     def label(self):
         if self.units is None:
             return self.name
         else:
             return '{} ({})'.format(self.name, self.units)
-    
+
     def read(self, sock, slave_id=0):
         """
         Attempt to read a raw value from the register.
-        This function has debugging logging that will print all bytes returned 
+        This function has debugging logging that will print all bytes returned
         from the server.
         """
         # NOTE: Addresses are 0 indexed, but the documented registers are 1 indexed.
         msg = tcp.read_holding_registers(slave_id, self.register - 1, 1)
         resp = tcp.send_message(msg, sock)
-        
+
         # Extract the single value from the results
         val = resp[0]
         print('{} ({}): {}'.format(self.name, self.register, val))
-        
+
         return val
 
     def convert(self, x):
@@ -64,7 +64,7 @@ class Register:
 #                  MIDNITESOLAR CONSTANTS                                               #
 #                                                                                       #
 # - Table are hard coded using the midnitesolar register map                            #
-# - http://www.midnitesolar.com/pdfs/classic_register_map_Rev-C5-December-8-2013.pdf    #  
+# - http://www.midnitesolar.com/pdfs/classic_register_map_Rev-C5-December-8-2013.pdf    #
 #########################################################################################
 
 # See table 4275-1 for details
@@ -100,11 +100,14 @@ RESTING_REASONS = {
     33: "OCP in a mode other than Solar or PV-Uset",
     34: "AD1CH.IbattMinus > 900 Peak negative battery current > 90.0 amps (Classic 150, 200)",
     35: "Battery voltage is less than Low Battery Disconnect (LBD) Typically Vbatt is less than 8.5 volts",
+    38: "Other charging sources appear to be active",
 }
 
 # See table 4120-1 for details
 CHARGE_STATES = {
     0: 'Resting',
+    1: 'Waking / Starting',
+    2: 'Waking / Starting',
     3: 'Absorb',
     4: 'BulkMppt',
     5: 'Float',
@@ -119,7 +122,7 @@ MNS_REGISTER_TABLE = [
     Register(
         name='Resting Reason',
         reg=4275,
-        func=lambda x: RESTING_REASONS[int(x)],
+        func=lambda x: RESTING_REASONS[x],
         units=None,
     ),
     Register(
@@ -155,7 +158,7 @@ MNS_REGISTER_TABLE = [
     Register(
         name='Charge State',
         reg=4120,
-        func=lambda x: CHARGE_STATES[int(x)],
+        func=lambda x: CHARGE_STATES[x >> 8],
         units=None,
     ),
     Register(

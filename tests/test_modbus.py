@@ -1,11 +1,12 @@
 import logging
-import six
 import threading
 
+import six
+
 import kottos.modbus
-from kottos.modbus.registers import MNS_REGISTER_TABLE
 from kottos.modbus.client import Client
-from kottos.modbus.server import serve, data_store
+from kottos.modbus.registers import MNS_REGISTER_TABLE
+from kottos.modbus.server import data_store, serve
 
 
 def test_read():

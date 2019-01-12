@@ -1,12 +1,11 @@
 import os
 import socket
 import ssl
+from contextlib import contextmanager
+from random import uniform
+from time import sleep
 
 import paho.mqtt.client as paho
-from time import sleep
-from random import uniform
-
-from contextlib import contextmanager
 
 
 @contextmanager
