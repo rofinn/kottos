@@ -1,8 +1,12 @@
 #!/usr/bin/env python
+# A simple python script that uses the kottos library to scan
+# modbus values from a collection of IPs
+import sys
 import inspect
+import os
 import time
+
 import kottos
-import kottos.modbus
 from kottos.modbus.client import Client
 from kottos.modbus.registers import MNS_REGISTER_TABLE
 

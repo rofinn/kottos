@@ -30,7 +30,7 @@ setup(
     author="Rory Finnegan",
     author_email="rory.finnegan@gmail.com",
     url="https://github.com/rofinn/kottos",
-    packages=["kottos"],
+    packages=["kottos", "kottos.modbus", "kottos.mqtt"],
     install_requires=DEPS,
     tests_require=TEST_DEPS,
     extras_require=EXTRAS,
